@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد إيميلات @hotmail.com</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        #container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px 0 rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        #results {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .email-box {
+            border: 1px solid #bbb;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px;
+            width: calc(30% - 10px); /* 3 items per row */
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h1>مولد إيميلات @hotmail.com</h1>
+    <input type="text" id="nameInput" placeholder="أدخل الاسم هنا" />
+    <button id="generateBtn">بحث</button>
+    <button id="stopBtn">إيقاف</button>
+
+    <div id="results"></div>
+</div>
+
+<script>
+    let interval;
+    const generatedEmails = new Set(); // مجموعة لتخزين الإيميلات المُولدة
+
+    document.getElementById('generateBtn').addEventListener('click', function() {
+        clearInterval(interval);
+        const name = document.getElementById('nameInput').value;
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // تنظيف النتائج السابقة
+        generatedEmails.clear(); // مسح الإيميلات المُولدة السابقة عند البحث الجديد
+
+        if (name) {
+            // مجموعة من تواريخ الميلاد
+            const birthyears = [2002, 2004, 2005, 2007, 2009, 2010];
+            // نشر النتائج بشكل أسرع (كل 40 مللي ثانية)
+            interval = setInterval(() => {
+                const randomSuffix = Math.floor(Math.random() * 1000); // رقم عشوائي
+                const randomYear = birthyears[Math.floor(Math.random() * birthyears.length)];
+                const formats = [
+                    `${name}.${randomSuffix}@hotmail.com`,
+                    `${name}_${randomSuffix}@hotmail.com`,
+                    `${name}-${randomSuffix}@hotmail.com`,
+                    `${name}${randomSuffix}@hotmail.com`,
+                    `${name}${Math.floor(Math.random() * 10)}@hotmail.com`,
+                    `${name}${randomYear}@hotmail.com`,      // إضافة سنة الميلاد
+                ];
+                const email = formats[Math.floor(Math.random() * formats.length)];
+
+                // إذا كانت الإيميل جديدة، أضفها للمجموعة وعرضها
+                if (!generatedEmails.has(email)) {
+                    generatedEmails.add(email);
+                    
+                    // توليد لون عشوائي
+                    const randomColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                    resultsDiv.innerHTML += `<div class="email-box" style="background-color: ${randomColor};">${email}</div>`;
+                }
+            }, 40); // تم تقليل الزمن من 200 مللي ثانية إلى 40 مللي ثانية
+        } else {
+            alert("يرجى إدخال اسم.");
+        }
+    });
+
+    document.getElementById('stopBtn').addEventListener('click', function() {
+        clearInterval(interval);
+    });
+</script>
+
+</body>
+</html>
